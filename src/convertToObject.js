@@ -5,26 +5,27 @@ function convertToObject(stylesString) {
     return {};
   }
 
-  const result = {};
   const rules = stylesString
     .split(';')
-    .map((r) => r.trim())
+    .map((rule) => rule.trim())
     .filter(Boolean);
 
-  for (const rule of rules) {
+  const styleObject = rules.reduce((acc, rule) => {
     const [property, ...valueParts] = rule.split(':');
 
     if (!property || valueParts.length === 0) {
-      continue;
+      return acc;
     }
 
     const key = property.trim();
     const value = valueParts.join(':').replace(/^\s+|\s+$/g, '');
 
-    result[key] = value;
-  }
+    acc[key] = value;
 
-  return result;
+    return acc;
+  }, {});
+
+  return styleObject;
 }
 
 module.exports = convertToObject;
